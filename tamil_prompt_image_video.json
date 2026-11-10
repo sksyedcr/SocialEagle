@@ -1,0 +1,43 @@
+{
+  "title": "Tirunelveli Visual Prompt Template",
+  "subject": "A photorealistic, cinematic view of the natural beauty and everyday rural life of Tirunelveli district, Tamil Nadu, India: the Thamirabarani river flowing past green paddy fields, palmyra trees, and the distant Western Ghats, with a small number of local residents in the landscape.",
+  "setting": {
+    "place": "Thamirabarani riverbank near Tirunelveli, Tamil Nadu, India",
+    "region_details": "Southern Tamil Nadu; fertile river plains, paddy fields, palmyra palms, and the Western Ghats visible in the distance",
+    "era": "Present day, with traditional rural Tamil details",
+    "time_of_day": "early morning",
+    "architecture": "A few modest traditional Tamil village houses in the far background, with tiled roofs and limewashed walls",
+    "textiles": "If people are visible, dress them in everyday South Tamil Nadu clothing such as simple cotton sarees and veshti, not costume-like clothing"
+  },
+  "lighting": "Soft, natural early-morning sunlight with gentle mist over the river and fields; realistic shadows and natural highlights",
+  "camera": {
+    "shot": "wide establishing landscape shot",
+    "lens": "35mm",
+    "angle": "eye-level from the riverbank",
+    "composition": "The river leads the eye through the foreground toward paddy fields, palmyra trees, and the distant hills; realistic scale and uncluttered framing"
+  },
+  "palette": [
+    "lush paddy green",
+    "river blue",
+    "earthy brown",
+    "soft sunrise gold",
+    "natural sky blue"
+  ],
+  "style": "Photorealistic travel photography, cinematic but natural, culturally grounded, fine environmental detail, realistic colours, no exaggerated saturation",
+  "aspect_ratio": "16:9",
+  "avoid": [
+    "religious places, buildings, monuments, symbols, ceremonies, or worship",
+    "temples, mosques, churches, shrines, and religious landmarks",
+    "generic or inaccurate Indian stereotypes and costume-like clothing",
+    "unrelated locations or landscapes outside Tirunelveli district",
+    "modern high-rise skylines, fantasy scenery, or artificial architecture",
+    "oversaturated colours, excessive HDR, plastic-looking textures",
+    "text, captions, watermarks, logos, borders, or UI elements",
+    "distorted people, extra limbs, duplicated objects, or malformed hands"
+  ],
+  "motion": {
+    "subject_motion": "The river flows gently, paddy leaves and palmyra fronds sway slightly in a light breeze, and distant birds move naturally across the sky",
+    "camera_move": "A slow, smooth cinematic forward dolly along the riverbank, keeping the landscape stable and natural",
+    "duration_seconds": 5
+  }
+}
