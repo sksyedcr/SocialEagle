@@ -1,0 +1,11 @@
+# Multi-PDF RAG application dependencies
+streamlit
+langchain
+langchain-community
+langchain-text-splitters
+langchain-openai
+langchain-huggingface
+sentence-transformers
+faiss-cpu
+pypdf
+python-dotenv
