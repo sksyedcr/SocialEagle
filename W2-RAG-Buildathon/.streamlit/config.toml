@@ -1,0 +1,20 @@
+[theme]
+base = "dark"
+primaryColor = "#4caf50"
+linkColor = "#81c784"
+backgroundColor = "#0f1411"
+secondaryBackgroundColor = "#18201b"
+textColor = "#e6ede8"
+borderColor = "#2a3a2f"
+baseRadius = "0.6rem"
+baseFontSize = 15
+metricValueFontSize = "1.6rem"
+headingFontSizes = ["2rem", "1.4rem", "1.15rem", "1rem", "0.9rem", "0.8rem"]
+paddingTop = "1.25rem"
+paddingBottom = "1rem"
+
+[server]
+maxUploadSize = 50
+
+[client]
+toolbarMode = "minimal"
