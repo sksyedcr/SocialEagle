@@ -1,0 +1,179 @@
+{
+  "name": "ETLAIAutomation",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "File Upload",
+        "formDescription": "Upload the Student Data",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "File Upload",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -176,
+        -32
+      ],
+      "id": "ac6fbedd-2542-43d7-a02a-e31f30ea985d",
+      "name": "On form submission",
+      "webhookId": "e1145dc1-8ebc-42d6-ac5a-3ec05aedd468"
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "File_Upload",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        -32
+      ],
+      "id": "a4d25fcc-397b-48a8-9ed1-210b8e34ab66",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Clean this student enrollment row and return ONLY a JSON object.\n\nRow data: {{ JSON.stringify($json) }}\n\nRules:\n- student_id: valid integer, if empty set MISSING\n- first_name: trim spaces, Title Case (Aarav)\n- last_name: trim spaces, Title Case (Sharma)\n- email: lowercase, fix @@ to @, if missing or invalid set INVALID_EMAIL\n- enrollment_date: convert to YYYY-MM-DD, if impossible date set INVALID_DATE\n- gpa: float between 0.0 and 4.0, if N/A or out of range set INVALID_GPA\n- major: Title Case, expand Mechanical Eng to Mechanical Engineering\n- status: only Active or Pending or Dropped (Unknown = Pending)\n- tuition_paid: integer only, strip $ and commas (NULL or empty = 0)\n- Ignore and remove any extra columns not listed above\n\nReturn ONLY raw JSON. No explanation. No markdown.",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        272,
+        -32
+      ],
+      "id": "6f9ac3ee-346e-41aa-b2f8-8bbd4c7cb5c3",
+      "name": "Basic LLM Chain",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        344,
+        200
+      ],
+      "id": "24884201-bb48-43b7-b5ec-ef809b295bf3",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "lyGIwQK780yzvq3Z",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  // 1. Grab the string output (checks standard Basic LLM Chain 'text' or 'output' field)\n  let rawText = item.json.text || item.json.output || Object.values(item.json)[0];\n\n  // 2. Clean up markdown backticks (```json ... ```) if Gemini added them\n  if (typeof rawText === 'string') {\n    rawText = rawText.replace(/^```json\\s*/i, '').replace(/```\\s*$/i, '').trim();\n    \n    // 3. Parse the string into a clean JSON object\n    try {\n      return { json: JSON.parse(rawText) };\n    } catch (error) {\n      return { json: { error: \"Failed to parse JSON\", raw: rawText } };\n    }\n  }\n\n  return { json: rawText };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        304
+      ],
+      "id": "73681491-a642-4531-b92c-651096e387c8",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        304
+      ],
+      "id": "3d0a5286-d523-4502-a2cd-a3ac76c8817a",
+      "name": "Convert to File"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7b1f996e-a6af-47aa-b394-da59086a9469",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "eb665eccfc1d3967b4c6cc48799e3990f8546d7851463d29647a0391d4ebad60"
+  },
+  "nodeGroups": [],
+  "id": "zl76rSg21m1Va2ek",
+  "tags": []
+}
